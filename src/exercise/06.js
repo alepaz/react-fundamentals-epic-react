@@ -4,27 +4,42 @@
 import React from 'react'
 
 function UsernameForm({onSubmitUsername}) {
-  // 🐨 add a submit event handler here (`handleSubmit`).
-  // 💰 Make sure to accept the `event` as an argument and call
-  // `event.preventDefault()` to prevent the default behavior of form submit
-  // events (which refreshes the page).
-  //
-  // 🐨 get the value from the username input (using whichever method
-  // you prefer from the options mentioned in the instructions)
-  // 💰 For example: event.target.elements[0]
-  // 🐨 Call `onSubmitUsername` with the value of the input
+  const inputRef = React.useRef(null)
+  const [value, setValue] = React.useState('')
+  const [error, setError] = React.useState(null)
 
-  // 🐨 add the onSubmit handler to the <form> below
+  const handleOnSubmit = e => {
+    e.preventDefault()
+    // console.log(e.target.elements[0].value);
+    // onSubmitUsername(e.target.elements[0].value);
+    const value = inputRef.current.value
+    console.log(inputRef)
+    onSubmitUsername(value)
+  }
 
-  // 🐨 make sure to associate the label to the input by specifying an `id` on
-  // the input and a matching value as an `htmlFor` prop on the label.
+  const handleChange = e => {
+    // if (e.target.value === e.target.value.toLowerCase()) {
+      setValue(e.target.value.toLowerCase())
+      setError(null)
+    // } else setError('username must be lower case')
+  }
+
   return (
-    <form>
+    <form onSubmit={handleOnSubmit}>
       <div>
-        <label>Username:</label>
-        <input type="text" />
+        <label htmlFor="username">Username:</label>
+        <input
+          id="username"
+          type="text"
+          ref={inputRef}
+          onChange={handleChange}
+          value={value}
+        />
+        {error ? error : null}
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={error}>
+        Submit
+      </button>
     </form>
   )
 }
